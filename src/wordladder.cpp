@@ -34,6 +34,7 @@
 #include <iostream>
 #include "console.h"
 #include "lexicon.h"
+#include "filelib.h"
 using namespace std;
 
 int main() {
@@ -58,10 +59,19 @@ int main() {
     return 0;
 }
 
+/*
+ * Function: nameImageFileToOpen
+ * Usage: Prompts the user to open an image based on the file name. Adds the
+ * image to the window if the image is found
+ * Params: GBufferedImage, GWindow
+ * -----------------------------------------------------------------
+ * Returns: None. Void function
+*/
+
 void getDictionary(Lexicon &dictionary){
-    //TO DO
-    //"Dictionary file name please: " reprompt if file name doesn't exist
-}
+    string filename = promptUserForFile("Dictionary file name: ","Unable to open that file. Try again.");
+    dictionary = Lexicon(filename);
+    }
 
 void getWords(const Lexicon &dictionary){
     //TO DO
