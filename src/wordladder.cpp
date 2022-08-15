@@ -1,49 +1,59 @@
-// This is the CPP file you will edit and turn in. (TODO: Remove this comment!)
-
-////A word ladder is a connection from one word to another formed by changing one
-/// letter at a time with the constraint that at each step the sequence of letters
-/// still forms a valid word.
-///code → cade → cate → date → data
+////
+/// This is an implementation of a word ladder. A word ladder is a connection from one word to
+/// another formed by changing one letter at a time with the constraint that at each step the
+/// sequence of letters still forms a valid word. For example,
+/// code → cade → cate → date → data
 ///
 
 /*
- *rogram that repeatedly prompts the user for two words and finds a minimum-length
- *ladder between the words. You must use the Stanford Stack and Queue collections
- *from Chapter 5, along with following a particular provided algorithm to find the
- *shortest word ladder. If there are multiple short word ladder, the program only
- *needs to generate 1
+ * Instructions
+ * Prompt the user for two words and finds a minimum-length ladder between the words
+ * Use the Stanford Stack and Queue collections from Chapter 5
+ * Use the provided algorithm to find the shortest word ladder
+ * If there are multiple short word ladder, the program only needs to generate 1
  *
- *Requirements
- *- Ignore case
- *- Check for users inputs, including: word 1 and 2 are valid dictionary words,they
- *are the same length and they are not they same word. If the input is invalid,
- *print warning messages and re-prompt
- *"The two words must be the same length"
- *"The two words must be found in the dictionary"
- *"The two words must be different"
- *- Keep a dictionary of all English words (Lexicon)
- *- Use breadth-first-search (BFS)
- * - Check word 1 change, then 2, 3, 4, changes away from the original word
- * - Use a Queue to store partial ladders to explore
- * - A partial ladder is a Stack
- * - Overall collection is  a Queue of Stacks
- * Use small dictionary to test first
- * As much as possible pass collections by reference
+ * Requirements
+ * - Ignore case
+ * - Check for users inputs, including:
+ * a. word 1 and 2 are valid dictionary words
+ * b. they are the same length
+ * c. they are not they same word
+ * - If the input is invalid, print warning messages and re-prompt:
+ * "The two words must be found in the dictionary"
+ * "The two words must be the same length"
+ * "The two words must be different"
+ * - Keep a dictionary of all English words (Lexicon)
+ * - Use small dictionary to test first
+ * - Where possible, pass collections by reference
+ * - Use breadth-first-search (BFS)
+ * a. Check word 1 change, then 2, 3, 4, changes away from the original word
+ * b. Use a Queue to store partial ladders to explore
+ * c. A partial ladder is a Stack
+ * d. Overall collection is  a Queue of Stacks
 */
 
 #include <iostream>
 #include "console.h"
 #include "lexicon.h"
 #include "filelib.h"
+#include "simpio.h"
 using namespace std;
+
+// Function prototypes
+void getDictionary(Lexicon &dictionary);
+void getWords(const Lexicon &dictionary);
+string checkWord(const Lexicon &dictionary, const string &prompt);
+void getWordLadder(const Lexicon &dictionary);
+
 
 int main() {
     //Initialising the dictionary as a Lexicon
     Lexicon dictionary;
 
     cout << "Welcome to Word Ladder!" << endl;
-    cout << "Please give me two English words, and I will convert the first into"
+    cout << "Please give me two English words, and I will convert the first into "
             "the second by modifying one letter at a time" << endl;
+    cout << endl;
 
     //Ask for the dictionary file name
     getDictionary(dictionary);
@@ -60,23 +70,66 @@ int main() {
 }
 
 /*
- * Function: nameImageFileToOpen
- * Usage: Prompts the user to open an image based on the file name. Adds the
- * image to the window if the image is found
- * Params: GBufferedImage, GWindow
+ * Function: getDictionary
+ * Usage: Prompts the user to get the reference dictionary by typing the file name. Reprompts the
+ * user if an invalid name is given.
+ * Params: dictionary as Lexicon
  * -----------------------------------------------------------------
  * Returns: None. Void function
 */
 
 void getDictionary(Lexicon &dictionary){
-    string filename = promptUserForFile("Dictionary file name: ","Unable to open that file. Try again.");
+    string filename = promptUserForFile(
+                "Dictionary file name: ","Unable to open that file. Try again.");
     dictionary = Lexicon(filename);
+    // Comment out later
+    cout << dictionary << endl;
     }
 
+/*
+ * Function: getWords
+ * Usage:
+ * - Ignore case
+ * - Check for users inputs, including:
+ * a. word 1 and 2 are valid dictionary words
+ * b. they are the same length
+ * c. they are not they same word
+ * - If the input is invalid, print warning messages and re-prompt:
+ * "The two words must be found in the dictionary"
+ * "The two words must be the same length"
+ * "The two words must be different"
+ * Params: GBufferedImage, GWindow
+ * -----------------------------------------------------------------
+ * Returns: None. Void function
+*/
+
 void getWords(const Lexicon &dictionary){
-    //TO DO
-    //Ask for word 1 "Word 1 (or hit Enter to quit): "
-    //Ask for word 2 "Word 2 (or hit Enter to quit): "
+    // Ask for word 1
+    string wordOne = checkWord(dictionary, "Word 1 (or hit Enter to quit): ");
+
+    // Ask for word 2
+    string wordTwo = checkWord(dictionary, "Word 2 (or hit Enter to quit): ");
+
+    // Check words are valid
+}
+
+string checkWord(const Lexicon &dictionary, const string &prompt){
+    while (true){
+        string word = getLine(prompt);
+        // Quit the program when the user enters blank as a word
+        if (word.empty()){
+            cout << "Exiting... see you later babes!" << endl;
+            return "";
+        }
+        // Remove white spaces in word and ignore case
+        word = toLowerCase(trim(word));
+        // Check if the word is in the dictionary
+        if (dictionary.contains(word)){
+            return word;
+        }
+        // If the word is not in the dictionary ignore the messages
+        cout << "The two words must be found in the dictionary." << endl;
+    }
 }
 
 void getWordLadder(const Lexicon &dictionary){
