@@ -44,19 +44,21 @@ using namespace std;
 
 // Function prototypes
 void getDictionary(Lexicon &dictionary);
-void getWords(const Lexicon &dictionary);
-string checkWord(const Lexicon &dictionary, const string &prompt, string &word);
+void getAndValidateWords(const Lexicon &dictionary, string &wordOne, string &wordTwo);
+void getWord(const string &prompt, string &word);
+bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const string &wordTwo);
 bool areWordsSameLength(const string &wordOne, const string &wordTwo);
 bool areWordsDifferent(const string &wordOne, const string &wordTwo);
 void getWordLadder(const Lexicon &dictionary, const string wordOne, const string wordTwo);
-void findNeighbourWord(
+void findNeighbourWords(
         const Lexicon &dictionary
         , Set<string> &usedWords
         , Queue<Stack<string>> &queue
         , const Stack<string> &initialLadder);
 int main() {
-    //Initialising the dictionary as a Lexicon
+    // Initialising the dictionary as a Lexicon
     Lexicon dictionary;
+    // Initialising word 1 and word 2 as strings
     string wordOne;
     string wordTwo;
 
@@ -68,13 +70,14 @@ int main() {
     //Ask for the dictionary file name
     getDictionary(dictionary);
 
-    getWords(dictionary);
+    //Repeat the following sequence
+    while (true) {
+        // Get word 1 and word 2 from users and perform validations on them
+        getAndValidateWords(dictionary, wordOne, wordTwo);
 
-    //Output word ladder "A ladder from [word 2] back to [word1]: [word ladder]
-    getWordLadder(dictionary, wordOne, wordTwo);
-
-    //Repeat the sequence
-
+        //Output shortest word ladder from word 1 to word 2
+        getWordLadder(dictionary, wordOne, wordTwo);
+    }
     cout << "Have a nice day." << endl;
     return 0;
 }
@@ -83,7 +86,7 @@ int main() {
  * Function: getDictionary
  * Usage: Prompts the user to get the reference dictionary by typing the file name. Reprompts the
  * user if an invalid name is given.
- * Params: dictionary as Lexicon
+ * Params: dictionary (Lexicon)
  * -----------------------------------------------------------------
  * Returns: None. Void function
 */
@@ -92,75 +95,80 @@ void getDictionary(Lexicon &dictionary){
     string filename = promptUserForFile(
                 "Dictionary file name: ","Unable to open that file. Try again.");
     dictionary = Lexicon(filename);
-    // Comment out later
-    cout << dictionary << endl;
     }
 
 /*
  * Function: getWords
  * Usage:
- * - Ignore case
- * - Check for users inputs, including:
+ * Prompts user to input word 1 and word 2 to calculate word ladder, and performs the following
+ * validation checks:
  * a. word 1 and 2 are valid dictionary words
  * b. they are the same length
  * c. they are not they same word
- * - If the input is invalid, print warning messages and re-prompt:
- * "The two words must be found in the dictionary"
- * "The two words must be the same length"
- * "The two words must be different"
- * Params: GBufferedImage, GWindow
+ * Warning messages will be displayed to the user if any of the checks fail
+ * Params: dictonary (Lexicon), wordOne (string), wordTwo (string)
  * -----------------------------------------------------------------
  * Returns: None. Void function
 */
 
-void getWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
+void getAndValidateWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
     while (true) {
         // Ask for word 1 and check if it is a valid dictionary word
-        string wordOne = checkWord(dictionary, "Word 1 (or hit Enter to quit): ", wordOne);
+        getWord("Word 1 (or hit Enter to quit): ", wordOne);
 
         // Ask for word 2 and check if it is a valid dictionary word
-        string wordTwo = checkWord(dictionary, "Word 2 (or hit Enter to quit): ", wordTwo);
+        getWord("Word 2 (or hit Enter to quit): ", wordTwo);
 
         // Check words are the same length and different from each other
-        if (areWordsSameLength(wordOne, wordTwo) && areWordsDifferent(wordOne, wordTwo)) {
+        if (wordsInDictionary(dictionary, wordOne, wordTwo)
+                && areWordsSameLength(wordOne, wordTwo)
+                && areWordsDifferent(wordOne, wordTwo)) {
                 break;
         }
     }
 }
 
-// Improved version for enhancement
-//string checkWord(const Lexicon &dictionary, const string &prompt){
-//    while (true) {
-//        string word = getLine(prompt);
-//        // Quit the program when the user enters blank as a word
-//        if (word.empty()){
-//            cout << "Exiting... see you later babes!" << endl;
-//            return "";
-//        }
-//        // Remove white spaces in word and ignore case
-//        word = toLowerCase(trim(word));
-//        // Check if the word is in the dictionary
-//        if (dictionary.contains(word)){
-//            return word;
-//        }
-//        // If the word is not in the dictionary ignore the messages
-//        cout << "The two words must be found in the dictionary." << endl;
-//    }
-//}
+/*
+ * Function: getWord
+ * Usage:
+ * Prompts user to input a word and strips the case and white spaces. Exits the program if the user
+ * enters blank
+ * Params: prompt (string), word (string)
+ * -----------------------------------------------------------------
+ * Returns: None. Void function
+ * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
+ * instead and repromt the user to re-enter the word prior to checking other validations
+*/
 
-string checkWord(const Lexicon &dictionary, const string &prompt, string &word){
-    while (true) {
-        string word = getLine(prompt);
-        // Quit the program when the user enters blank as a word
-        if (word.empty()){
-            cout << "Exiting... see you later babes!" << endl;
-            return "";
-        }
+void getWord(const string &prompt, string &word){
+    word = getLine(prompt);
+    // Quit the program when the user enters blank as a word
+    if (word.empty()){
+        cout << "Exiting... see you later babes!" << endl;
+    } else {
         // Remove white spaces in word and ignore case
         word = toLowerCase(trim(word));
-        // Check if the word is in the dictionary
     }
 }
+
+
+/*
+ * Function: isWordInDictionary
+ * Usage:
+ * Check if a word is in dictionary, and if not display a warning to the user
+ * Params: string, string
+ * -------------------------------------------------------------------------------------------------
+ * Returns: boolean true or false
+*/
+
+bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const string &wordTwo){
+    if (!dictionary.contains(wordOne) || !dictionary.contains(wordTwo)){
+        cout << "The two words must be found in the dictionary." << endl;
+        return false;
+    }
+    return true;
+}
+
 
 /*
  * Function: areWordsSameLength
@@ -202,69 +210,70 @@ bool areWordsDifferent(const string &wordOne, const string &wordTwo){
  * Find the shortest word ladder from wordOne to wordTwo
  * Params: string, string
  * -------------------------------------------------------------------------------------------------
- * Returns: boolean true or false
+ * Returns: None. Void function
 */
 
 void getWordLadder(const Lexicon &dictionary, const string wordOne, const string wordTwo){
-    // Initialise a stack storing wordOne only
+    // Initialise a stack storing word 1 only
     Stack<string> stack {wordOne};
     // Initialise a queue of stacks storing the initial stack
     Queue<Stack<string>> queue {stack};
     // Initialise a set of words use in any previous ladders so these can be ignored to avoid
     // reusing words
     Set<string> usedWords;
-    while (queue.peek().peek() != wordTwo || !queue.isEmpty()){
-        Stack<string> initialladder = queue.dequeue();
-        findNeighbourWord(dictionary, usedWords, queue, initialladder);
+
+    // Repeat the following until the queue is empty
+    while (!queue.isEmpty()){
+        // Stop if word 2 is found
+        if (queue.peek().peek() == wordTwo) {
+            break;
+        }
+        // Get the stack containing the first ladder at the front of the queue
+        Stack<string> firstLadder = queue.dequeue();
+        // Find the neighbouring words for the last word on the first Ladder
+        findNeighbourWords(dictionary, usedWords, queue, firstLadder);
     }
-}
-
-
-/*    repeat until queue is empty or w2 is found:
-        dequeue a stack s.
-        for each valid unused English word w
-                that is a "neighbor" (differs by 1 letter)
-                of the word on top of s:
-            create a new stack s2 whose contents are the same as s,
-                    but with w added on top,
-            and add s2 to the queue.
- * { {cat} } - 1 stack with starting word
-{ {cat,cot}, {cat,cad}, {cat,car} } - enqueue the neighbours
-{ {cat,cad}, {cat,car}, {cat,cot,dot}, {cat,cot,cog}, {cat,cot,con} }  - enqueue the neighbours etc.
-{ {cat,car}, {cat,cot,dot}, {cat,cot,cog}, {cat,cot,con}, {cat,cad,bad} }
-{ {cat,cot,dot}, {cat,cot,cog}, {cat,cot,con}, {cat,cad,bad}, {cat,car,bar}, {cat,car,war} }
-{ {cat,cot,cog}, {cat,cot,con}, {cat,cad,bad}, {cat,car,bar}, {cat,car,war}, {cat,cot,dot,dog} }
-
+    // Get the shortest word ladder at the front of the queue
+    Stack<string> wordLadderStack = queue.dequeue();
+    // Display the word ladder from word 1 to word 2
+    string wordLadder;
+    for (string word: wordLadderStack){
+        wordLadder.append(wordLadderStack.pop() + " ");
+    }
+    cout << "A ladder from " << wordOne << " back to " << wordTwo << ":" << endl;
+    cout <<  wordLadder << endl;
 }
 
 /*
- * Function: findNeighbourWord
+ * Function: findNeighbourWords
  * Usage:
- * Find the neighbour word from a given start word, which is a word of the same length but differs
- * from the start word by exactly 1 letter e.g.date and data
- * Params: dictionary (Lexicon), usedWords (Set), startWord (string)
+ * Find all the neighbour words from a given start word, which is a word of the same length but
+ * differs from the start word by exactly 1 letter e.g. date and data
+ * Params: dictionary (Lexicon), usedWords (Set), queue (Queue of Stacks of strings),
+ * firstLadder (Stack of strings)
  * -------------------------------------------------------------------------------------------------
- * Returns: boolean true or false
+ * Returns: None. Void function
 */
-void findNeighbourWord(
+void findNeighbourWords(
         const Lexicon &dictionary
         , Set<string> &usedWords
         , Queue<Stack<string>> &queue
-        , const Stack<string> &initialLadder) {
+        , const Stack<string> &firstLadder) {
     // Get the start word at the top of the initial word ladder
-    string startWord = initialLadder.peek();
+    string startWord = firstLadder.peek();
     // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
     // 2nd loop to loop through a-z of the alphabet
-    for (int i: startWord) {
-        for ( char l = 'a'; l<='z'; ++l) {
-            // Replace the letter with another letter in turn
+    for (int i = 0; i < startWord.length(); i++) {
+        for (char l = 'a'; l<='z'; ++l) {
+            // Replace the letter in the start word with another letter from a to z in turn to find
+            // all valid word combinations
             string neighbourWord = stringReplace(startWord, startWord[i], l, 1);
-            // Check word is a valid dictionary word and it hasn't been used already
+            // Check word combination is a valid dictionary word and it hasn't been used already
             if (dictionary.contains(neighbourWord) && !usedWords.contains(neighbourWord)) {
                 // Add the neighbour word to the set of used words
                 usedWords.add(neighbourWord);
                 // Create a copy of the initial ladder and add the neighbour word on top
-                Stack<string> newLadder = initialLadder;
+                Stack<string> newLadder = firstLadder;
                 newLadder.push(neighbourWord);
                 // Add the new ladder into the queue
                 queue.enqueue(newLadder);
