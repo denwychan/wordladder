@@ -37,14 +37,20 @@
 #include "lexicon.h"
 #include "filelib.h"
 #include "simpio.h"
+#include "queue.h"
+#include "stack.h"
+#include "set.h"
 using namespace std;
 
 // Function prototypes
 void getDictionary(Lexicon &dictionary);
 void getWords(const Lexicon &dictionary);
 string checkWord(const Lexicon &dictionary, const string &prompt);
+bool areWordsSameLength(const string &wordOne, const string &wordTwo);
+bool areWordsDifferent(const string &wordOne, const string &wordTwo);
 void getWordLadder(const Lexicon &dictionary);
-
+string findNeighbourWord(
+        const Lexicon &dictionary, const Set<string> &usedWords,  const string &startWord);
 
 int main() {
     //Initialising the dictionary as a Lexicon
@@ -104,17 +110,22 @@ void getDictionary(Lexicon &dictionary){
 */
 
 void getWords(const Lexicon &dictionary){
-    // Ask for word 1
-    string wordOne = checkWord(dictionary, "Word 1 (or hit Enter to quit): ");
+    while (true) {
+        // Ask for word 1 and check if it is a valid dictionary word
+        string wordOne = checkWord(dictionary, "Word 1 (or hit Enter to quit): ");
 
-    // Ask for word 2
-    string wordTwo = checkWord(dictionary, "Word 2 (or hit Enter to quit): ");
+        // Ask for word 2 and check if it is a valid dictionary word
+        string wordTwo = checkWord(dictionary, "Word 2 (or hit Enter to quit): ");
 
-    // Check words are valid
+        // Check words are the same length and different from each other
+        if (areWordsSameLength(wordOne, wordTwo) && areWordsDifferent(wordOne, wordTwo)) {
+                break;
+        }
+    }
 }
 
 string checkWord(const Lexicon &dictionary, const string &prompt){
-    while (true){
+    while (true) {
         string word = getLine(prompt);
         // Quit the program when the user enters blank as a word
         if (word.empty()){
@@ -132,11 +143,51 @@ string checkWord(const Lexicon &dictionary, const string &prompt){
     }
 }
 
+/*
+ * Function: areWordsSameLength
+ * Usage:
+ * Check if two words have the same length, and if not display a warning to the user
+ * Params: string, string
+ * -------------------------------------------------------------------------------------------------
+ * Returns: boolean true or false
+*/
+
+bool areWordsSameLength(const string &wordOne, const string &wordTwo){
+    if (wordOne.length() != wordTwo.length()) {
+        cout << "The two words must be the same length" << endl;
+        return false;
+    }
+    return true;
+}
+
+/*
+ * Function: areWordsDifferent
+ * Usage:
+ * Check if two words are different, and if not display a warning to the user
+ * Params: string, string
+ * -------------------------------------------------------------------------------------------------
+ * Returns: boolean true or false
+*/
+
+bool areWordsDifferent(const string &wordOne, const string &wordTwo){
+    if (wordOne == wordTwo) {
+        cout << "The two words must be different" << endl;
+        return false;
+    }
+    return true;
+}
+
+
 void getWordLadder(const Lexicon &dictionary){
-/* Word ladder pseudo code
- * how to find a word ladder from word w1 to w2:
-    create a queue of stacks, initially containing only a single stack storing {w1}.
-    repeat until queue is empty or w2 is found:
+// Word ladder pseudo code
+// how to find a word ladder from word w1 to w2:
+// create a queue of stacks, initially containing only a single stack storing {w1}.
+   Queue<string> queue;
+   Stack<string> stack;
+   Set<string> usedWords;
+
+
+/*    repeat until queue is empty or w2 is found:
         dequeue a stack s.
         for each valid unused English word w
                 that is a "neighbor" (differs by 1 letter)
@@ -153,17 +204,37 @@ void getWordLadder(const Lexicon &dictionary){
 * Do not reuse words in previous shorter ladder so do not enqueue longer ladder in algo
 * To do this keep track of the set of words used in any ladder and ignore these
 */
-}
 
-void findNeigbourWords(const Lexicon &dictionary){
-/*
- * Finding neighbor words
- * A neighbor of a given word w is a word of the same length as w that differs by exactly 1 letter from w
- * e.g. date and data
- * Use 2 nested loops for efficiency: 1st loop for index of the word, 2nd loop that loops through a-z to
- * replace the letter with another letter in turn
- * Check against dictionary this is a valid word
- * * Do not reuse words in previous shorter ladder so do not enqueue longer ladder in algo
+/* Do not reuse words in previous shorter ladder so do not enqueue longer ladder in algo
 * To do this keep track of the set of words used in any ladder and ignore these
 */
+}
+
+/*
+ * Function: findNeighbourWord
+ * Usage:
+ * Find the neighbour word from a given start word, which is a word of the same length but differs
+ * from the start word by exactly 1 letter e.g.date and data
+ * Params: dictionary (Lexicon), usedWords (Set), startWord (string)
+ * -------------------------------------------------------------------------------------------------
+ * Returns: boolean true or false
+*/
+string findNeighbourWord(
+        const Lexicon &dictionary, const Set<string> &usedWords,  const string &startWord){
+    // Initialise the alphabet for the algorithm
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    cout << alphabet.length() << endl;
+
+    // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
+    // 2nd loop to loop through a-z of the alphabet
+    for (int i: startWord){
+        for (int j: alphabet){
+            // Replace the letter with another letter in turn
+            string neighbourWord = stringReplace(startWord, startWord[i], alphabet[j],1);
+            // Check word is a valid dictionary word and it hasn't been used already
+            if (dictionary.contains(neighbourWord) && !usedWords.contains(neighbourWord)) {
+                return neighbourWord;
+            }
+        }
+    }
 }
