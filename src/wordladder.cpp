@@ -44,19 +44,19 @@ using namespace std;
 
 // Function prototypes
 void getDictionary(Lexicon &dictionary);
-void getAndValidateWords(const Lexicon &dictionary, string &wordOne, string &wordTwo);
 string getWord(const string &prompt);
 bool emptyWord(string word);
-bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo);
-bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const string &wordTwo);
-bool areWordsSameLength(const string &wordOne, const string &wordTwo);
-bool areWordsDifferent(const string &wordOne, const string &wordTwo);
-void getWordLadder(const Lexicon &dictionary, const string wordOne, const string wordTwo);
+bool validWords(const Lexicon &dictionary, string wordOne, string wordTwo);
+bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo);
+bool areWordsSameLength(string wordOne, string wordTwo);
+bool areWordsDifferent(string wordOne, string wordTwo);
+void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo);
 void findNeighbourWords(
         const Lexicon &dictionary
         , Set<string> &usedWords
         , Queue<Stack<string>> &queue
         , const Stack<string> &initialLadder);
+
 int main() {
     // Initialising the dictionary as a Lexicon
     Lexicon dictionary;
@@ -84,7 +84,7 @@ int main() {
         }
 
         // Perform validation checks on word 1 and word 2 before proceeeding to word ladder stage
-        if (validWords(dictionary, wordOne, wordTwo)){
+        if (validWords(dictionary, wordOne, wordTwo)) {
             //Output shortest word ladder from word 1 to word 2
             getWordLadder(dictionary, wordOne, wordTwo);
             cout << endl;
@@ -103,7 +103,7 @@ int main() {
  * Returns: None. Void function
 */
 
-void getDictionary(Lexicon &dictionary){
+void getDictionary(Lexicon &dictionary) {
     string filename = promptUserForFile(
                 "Dictionary file name: ","Unable to open that file. Try again.");
     dictionary = Lexicon(filename);
@@ -120,7 +120,7 @@ void getDictionary(Lexicon &dictionary){
  * instead and repromt the user to re-enter the word prior to checking other validations
 */
 
-string getWord(const string &prompt){
+string getWord(const string &prompt) {
     string word = getLine(prompt);
      word = toLowerCase(trim(word));
      return word;
@@ -137,10 +137,9 @@ string getWord(const string &prompt){
  * instead and repromt the user to re-enter the word prior to checking other validations
 */
 bool emptyWord(string word) {
-    if (word == ""){
-        // Uncomment for final version - this is commented out to pass automated tests
-//        cout << "Exiting... see you later babes!" << endl;
-//        pause(2000);
+    if (word == "") {
+        cout << "Exiting... see you later babes!" << endl;
+        pause(2000);
         return true;
     } else {
         return false;
@@ -160,7 +159,7 @@ bool emptyWord(string word) {
  * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
  * instead and repromt the user to re-enter the word prior to checking other validations
 */
-bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
+bool validWords(const Lexicon &dictionary, string wordOne, string wordTwo) {
     // Check words are valid dictionary words, the same length and different from each other
     if (wordsInDictionary(dictionary, wordOne, wordTwo)
             && areWordsSameLength(wordOne, wordTwo)
@@ -171,7 +170,6 @@ bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
     }
 }
 
-
 /*
  * Function: isWordInDictionary
  * Usage:
@@ -181,14 +179,13 @@ bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
  * Returns: boolean true or false
 */
 
-bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const string &wordTwo){
-    if (!dictionary.contains(wordOne) || !dictionary.contains(wordTwo)){
+bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo) {
+    if (!dictionary.contains(wordOne) || !dictionary.contains(wordTwo)) {
         cout << "The two words must be found in the dictionary." << endl;
         return false;
     }
     return true;
 }
-
 
 /*
  * Function: areWordsSameLength
@@ -199,7 +196,7 @@ bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const s
  * Returns: boolean true or false
 */
 
-bool areWordsSameLength(const string &wordOne, const string &wordTwo){
+bool areWordsSameLength(string wordOne, string wordTwo) {
     if (wordOne.length() != wordTwo.length()) {
         cout << "The two words must be the same length" << endl;
         return false;
@@ -216,7 +213,7 @@ bool areWordsSameLength(const string &wordOne, const string &wordTwo){
  * Returns: boolean true or false
 */
 
-bool areWordsDifferent(const string &wordOne, const string &wordTwo){
+bool areWordsDifferent(string wordOne, string wordTwo) {
     if (wordOne == wordTwo) {
         cout << "The two words must be different" << endl;
         return false;
@@ -233,17 +230,17 @@ bool areWordsDifferent(const string &wordOne, const string &wordTwo){
  * Returns: None. Void function
 */
 
-void getWordLadder(const Lexicon &dictionary, const string wordOne, const string wordTwo){
+void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo) {
     // Initialise a stack storing word 1 only
     Stack<string> stack {wordOne};
     // Initialise a queue of stacks storing the initial stack
     Queue<Stack<string>> queue {stack};
     // Initialise a set of words use in any previous ladders so these can be ignored to avoid
     // reusing words
-    Set<string> usedWords;
+    Set<string> usedWords {wordOne};
 
     // Repeat the following until the queue is empty
-    while (!queue.isEmpty()){
+    while (!queue.isEmpty()) {
         // Stop if word 2 is found
         if (queue.peek().peek() == wordTwo) {
             break;
@@ -258,11 +255,14 @@ void getWordLadder(const Lexicon &dictionary, const string wordOne, const string
         Stack<string> wordLadderStack = queue.dequeue();
         // Display the word ladder from word 1 to word 2
         string wordLadder;
-        for (string word: wordLadderStack){
+        for (string word: wordLadderStack) {
             wordLadder.append(wordLadderStack.pop() + " ");
         }
         cout << "A ladder from " << wordTwo << " back to " << wordOne << ":" << endl;
         cout <<  wordLadder << endl;
+    } else {
+        // If no ladder is found, notify the user
+        cout << "No word ladder found from " << wordTwo << " back to " << wordOne << endl;
     }
 }
 
@@ -287,9 +287,11 @@ void findNeighbourWords(
     // 2nd loop to loop through a-z of the alphabet
     for (int i = 0; i < startWord.length(); i++) {
         for (char l = 'a'; l<='z'; ++l) {
-            // Replace the letter in the start word with another letter from a to z in turn to find
-            // all valid word combinations
-            string neighbourWord = stringReplace(startWord, startWord[i], l, 1);
+            // Copy the start word to create the neighbour word
+            string neighbourWord = startWord;
+            // Replace each letter in the neighbour word with another letter from a to z in turn to
+            // find all valid word combinations
+            neighbourWord[i] = l;
             // Check word combination is a valid dictionary word and it hasn't been used already
             if (dictionary.contains(neighbourWord) && !usedWords.contains(neighbourWord)) {
                 // Add the neighbour word to the set of used words
