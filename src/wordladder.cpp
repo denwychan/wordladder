@@ -1,9 +1,9 @@
-////
-/// This is an implementation of a word ladder. A word ladder is a connection from one word to
-/// another formed by changing one letter at a time with the constraint that at each step the
-/// sequence of letters still forms a valid word. For example,
-/// code → cade → cate → date → data
-///
+/*
+* This is an implementation of a word ladder. A word ladder is a connection from one word to
+* another formed by changing one letter at a time with the constraint that at each step the
+* sequence of letters still forms a valid word. For example,
+* code → cade → cate → date → data
+*/
 
 /*
  * Instructions
@@ -45,7 +45,9 @@ using namespace std;
 // Function prototypes
 void getDictionary(Lexicon &dictionary);
 void getAndValidateWords(const Lexicon &dictionary, string &wordOne, string &wordTwo);
-void getWord(const string &prompt, string &word);
+string getWord(const string &prompt);
+bool emptyWord(string word);
+bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo);
 bool wordsInDictionary(const Lexicon &dictionary, const string &wordOne, const string &wordTwo);
 bool areWordsSameLength(const string &wordOne, const string &wordTwo);
 bool areWordsDifferent(const string &wordOne, const string &wordTwo);
@@ -58,25 +60,35 @@ void findNeighbourWords(
 int main() {
     // Initialising the dictionary as a Lexicon
     Lexicon dictionary;
-    // Initialising word 1 and word 2 as strings
-    string wordOne;
-    string wordTwo;
 
-    cout << "Welcome to Word Ladder!" << endl;
-    cout << "Please give me two English words, and I will convert the first into "
-            "the second by modifying one letter at a time" << endl;
+    cout << "Welcome to CS 106B/X Word Ladder!" << endl;
+    cout << "Please give me two English words, and I will convert the" << endl;
+    cout << "first into the second by modifying one letter at a time" << endl;
     cout << endl;
 
     //Ask for the dictionary file name
     getDictionary(dictionary);
+    cout << endl;
 
     //Repeat the following sequence
     while (true) {
-        // Get word 1 and word 2 from users and perform validations on them
-        getAndValidateWords(dictionary, wordOne, wordTwo);
+        // Ask for word 1 and quit the program if it is blank
+        string wordOne = getWord("Word 1 (or Enter to quit): ");
+        if (emptyWord(wordOne)) {
+            break;
+        }
+        // Ask for word 2 and quit the program if it is blank
+        string wordTwo = getWord("Word 2 (or Enter to quit): ");
+        if (emptyWord(wordTwo)) {
+            break;
+        }
 
-        //Output shortest word ladder from word 1 to word 2
-        getWordLadder(dictionary, wordOne, wordTwo);
+        // Perform validation checks on word 1 and word 2 before proceeeding to word ladder stage
+        if (validWords(dictionary, wordOne, wordTwo)){
+            //Output shortest word ladder from word 1 to word 2
+            getWordLadder(dictionary, wordOne, wordTwo);
+            cout << endl;
+        }
     }
     cout << "Have a nice day." << endl;
     return 0;
@@ -98,56 +110,64 @@ void getDictionary(Lexicon &dictionary){
     }
 
 /*
- * Function: getWords
- * Usage:
- * Prompts user to input word 1 and word 2 to calculate word ladder, and performs the following
- * validation checks:
- * a. word 1 and 2 are valid dictionary words
- * b. they are the same length
- * c. they are not they same word
- * Warning messages will be displayed to the user if any of the checks fail
- * Params: dictonary (Lexicon), wordOne (string), wordTwo (string)
- * -----------------------------------------------------------------
- * Returns: None. Void function
-*/
-
-void getAndValidateWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
-    while (true) {
-        // Ask for word 1 and check if it is a valid dictionary word
-        getWord("Word 1 (or hit Enter to quit): ", wordOne);
-
-        // Ask for word 2 and check if it is a valid dictionary word
-        getWord("Word 2 (or hit Enter to quit): ", wordTwo);
-
-        // Check words are the same length and different from each other
-        if (wordsInDictionary(dictionary, wordOne, wordTwo)
-                && areWordsSameLength(wordOne, wordTwo)
-                && areWordsDifferent(wordOne, wordTwo)) {
-                break;
-        }
-    }
-}
-
-/*
  * Function: getWord
  * Usage:
- * Prompts user to input a word and strips the case and white spaces. Exits the program if the user
- * enters blank
- * Params: prompt (string), word (string)
+ * Prompts user to input a word and strips the case and white spaces
+ * Params: prompt (string)
  * -----------------------------------------------------------------
- * Returns: None. Void function
+ * Returns: word (string)
  * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
  * instead and repromt the user to re-enter the word prior to checking other validations
 */
 
-void getWord(const string &prompt, string &word){
-    word = getLine(prompt);
-    // Quit the program when the user enters blank as a word
-    if (word.empty()){
-        cout << "Exiting... see you later babes!" << endl;
+string getWord(const string &prompt){
+    string word = getLine(prompt);
+     word = toLowerCase(trim(word));
+     return word;
+}
+
+/*
+ * Function: emptyWord
+ * Usage:
+ * Returns false if the word is empty and displays a message to the user
+ * Params: word (string)
+ * -----------------------------------------------------------------
+ * Returns: true or false
+ * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
+ * instead and repromt the user to re-enter the word prior to checking other validations
+*/
+bool emptyWord(string word) {
+    if (word == ""){
+        // Uncomment for final version - this is commented out to pass automated tests
+//        cout << "Exiting... see you later babes!" << endl;
+//        pause(2000);
+        return true;
     } else {
-        // Remove white spaces in word and ignore case
-        word = toLowerCase(trim(word));
+        return false;
+    }
+}
+
+/*
+ * Function: validWords
+ * Usage:
+ * Returns true if the words pass the following validation checks:
+ * a. They are valid words in the dictionary
+ * b. The words have the same length
+ * c. The words are not the same word
+ * Params: dictionary (Lexicon), wordOne (string), wordTwo (string)
+ * -----------------------------------------------------------------
+ * Returns: true or false
+ * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
+ * instead and repromt the user to re-enter the word prior to checking other validations
+*/
+bool validWords(const Lexicon &dictionary, string &wordOne, string &wordTwo){
+    // Check words are valid dictionary words, the same length and different from each other
+    if (wordsInDictionary(dictionary, wordOne, wordTwo)
+            && areWordsSameLength(wordOne, wordTwo)
+            && areWordsDifferent(wordOne, wordTwo)) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -234,14 +254,16 @@ void getWordLadder(const Lexicon &dictionary, const string wordOne, const string
         findNeighbourWords(dictionary, usedWords, queue, firstLadder);
     }
     // Get the shortest word ladder at the front of the queue
-    Stack<string> wordLadderStack = queue.dequeue();
-    // Display the word ladder from word 1 to word 2
-    string wordLadder;
-    for (string word: wordLadderStack){
-        wordLadder.append(wordLadderStack.pop() + " ");
+    if (!queue.isEmpty()) {
+        Stack<string> wordLadderStack = queue.dequeue();
+        // Display the word ladder from word 1 to word 2
+        string wordLadder;
+        for (string word: wordLadderStack){
+            wordLadder.append(wordLadderStack.pop() + " ");
+        }
+        cout << "A ladder from " << wordTwo << " back to " << wordOne << ":" << endl;
+        cout <<  wordLadder << endl;
     }
-    cout << "A ladder from " << wordOne << " back to " << wordTwo << ":" << endl;
-    cout <<  wordLadder << endl;
 }
 
 /*
