@@ -52,10 +52,11 @@ bool areWordsSameLength(string wordOne, string wordTwo);
 bool areWordsDifferent(string wordOne, string wordTwo);
 void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo);
 void findNeighbourWords(
-        const Lexicon &dictionary
-        , Set<string> &usedWords
-        , Queue<Stack<string>> &queue
-        , const Stack<string> &initialLadder);
+        const Lexicon &dictionary,
+        Set<string> &usedWords,
+        Queue<Stack<string>> &queue,
+        const Stack<string> &initialLadder);
+
 
 int main() {
     // Initialising the dictionary as a Lexicon
