@@ -126,8 +126,8 @@ void getDictionary(Lexicon &dictionary) {
 
 string getWord(const string &prompt) {
     string word = getLine(prompt);
-     word = toLowerCase(trim(word));
-     return word;
+    return toLowerCase(trim(word));
+
 }
 
 /*
