@@ -72,7 +72,8 @@ int main() {
     getDictionary(dictionary);
     cout << endl;
 
-    //Repeat the following sequence
+    // Repeat the following sequence
+
     while (true) {
         // Ask for word 1 and quit the program if it is blank
         string wordOne = getWord("Word 1 (or Enter to quit): ");
