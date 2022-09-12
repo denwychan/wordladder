@@ -111,7 +111,8 @@ void getDictionary(Lexicon &dictionary) {
                 "Dictionary file name: ", "Unable to open that file. Try again.");
 
     dictionary = Lexicon(filename);
-    }
+}
+
 
 /*
  * Function: getWord
