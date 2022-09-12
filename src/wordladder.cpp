@@ -282,10 +282,11 @@ void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo) {
  * Returns: None. Void function
 */
 void findNeighbourWords(
-        const Lexicon &dictionary
-        , Set<string> &usedWords
-        , Queue<Stack<string>> &queue
-        , const Stack<string> &firstLadder) {
+        const Lexicon &dictionary,
+        Set<string> &usedWords,
+        Queue<Stack<string>> &queue,
+        const Stack<string> &firstLadder) {
+
     // Get the start word at the top of the initial word ladder
     string startWord = firstLadder.peek();
     // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
