@@ -292,7 +292,8 @@ void findNeighbourWords(
     // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
     // 2nd loop to loop through a-z of the alphabet
     for (int i = 0; i < startWord.length(); i++) {
-        for (char l = 'a'; l<='z'; ++l) {
+        for (char l = 'a'; l <='z'; ++l) {
+
             // Copy the start word to create the neighbour word
             string neighbourWord = startWord;
             // Replace each letter in the neighbour word with another letter from a to z in turn to
