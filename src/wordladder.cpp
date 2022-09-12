@@ -67,7 +67,8 @@ int main() {
     cout << "first into the second by modifying one letter at a time" << endl;
     cout << endl;
 
-    //Ask for the dictionary file name
+    // Ask for the dictionary file name
+
     getDictionary(dictionary);
     cout << endl;
 
