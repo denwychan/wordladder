@@ -108,7 +108,8 @@ int main() {
 
 void getDictionary(Lexicon &dictionary) {
     string filename = promptUserForFile(
-                "Dictionary file name: ","Unable to open that file. Try again.");
+                "Dictionary file name: ", "Unable to open that file. Try again.");
+
     dictionary = Lexicon(filename);
     }
 
