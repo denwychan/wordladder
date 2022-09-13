@@ -77,12 +77,16 @@ int main() {
     while (true) {
         // Ask for word 1 and quit the program if it is blank
         string wordOne = getWord("Word 1 (or Enter to quit): ");
-        if (emptyWord(wordOne)) {
+        if (wordOne == "") {
+            cout << "Exiting... see you later babes!" << endl;
+            pause(2000);
             break;
         }
         // Ask for word 2 and quit the program if it is blank
         string wordTwo = getWord("Word 2 (or Enter to quit): ");
-        if (emptyWord(wordTwo)) {
+        if (wordTwo == "") {
+            cout << "Exiting... see you later babes!" << endl;
+            pause(2000);
             break;
         }
 
@@ -129,26 +133,6 @@ string getWord(const string &prompt) {
     string word = getLine(prompt);
     return toLowerCase(trim(word));
 
-}
-
-/*
- * Function: emptyWord
- * Usage:
- * Returns false if the word is empty and displays a message to the user
- * Params: word (string)
- * -----------------------------------------------------------------
- * Returns: true or false
- * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
- * instead and repromt the user to re-enter the word prior to checking other validations
-*/
-bool emptyWord(string word) {
-    if (word == "") {
-        cout << "Exiting... see you later babes!" << endl;
-        pause(2000);
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /*
