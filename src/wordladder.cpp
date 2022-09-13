@@ -293,13 +293,13 @@ void findPartialWordLadders(
     // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
     // 2nd loop to loop through a-z of the alphabet
     for (int i = 0; i < startWord.length(); i++) {
-        for (char l = 'a'; l <='z'; ++l) {
+        for (char letter = 'a'; letter <='z'; ++letter) {
 
             // Copy the start word to create the neighbour word
             string neighbourWord = startWord;
             // Replace each letter in the neighbour word with another letter from a to z in turn to
             // find all valid word combinations
-            neighbourWord[i] = l;
+            neighbourWord[i] = letter;
             // Check word combination is a valid dictionary word and it hasn't been used already
             if (dictionary.contains(neighbourWord) && !usedWords.contains(neighbourWord)) {
                 // Add the neighbour word to the set of used words
