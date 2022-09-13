@@ -230,7 +230,7 @@ bool areWordsDifferent(string wordOne, string wordTwo) {
  * Function: getWordLadder
  * Usage:
  * Find the shortest word ladder from wordOne to wordTwo
- * Params: string, string
+ * Params: dictionary (Lexicon), wordOne (string), wordTwo (string)
  * -------------------------------------------------------------------------------------------------
  * Returns: None. Void function
 */
