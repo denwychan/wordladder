@@ -5,33 +5,6 @@
 * code → cade → cate → date → data
 */
 
-/*
- * Instructions
- * Prompt the user for two words and finds a minimum-length ladder between the words
- * Use the Stanford Stack and Queue collections from Chapter 5
- * Use the provided algorithm to find the shortest word ladder
- * If there are multiple short word ladder, the program only needs to generate 1
- *
- * Requirements
- * - Ignore case
- * - Check for users inputs, including:
- * a. word 1 and 2 are valid dictionary words
- * b. they are the same length
- * c. they are not they same word
- * - If the input is invalid, print warning messages and re-prompt:
- * "The two words must be found in the dictionary"
- * "The two words must be the same length"
- * "The two words must be different"
- * - Keep a dictionary of all English words (Lexicon)
- * - Use small dictionary to test first
- * - Where possible, pass collections by reference
- * - Use breadth-first-search (BFS)
- * a. Check word 1 change, then 2, 3, 4, changes away from the original word
- * b. Use a Queue to store partial ladders to explore
- * c. A partial ladder is a Stack
- * d. Overall collection is  a Queue of Stacks
-*/
-
 #include <iostream>
 #include "console.h"
 #include "lexicon.h"
@@ -106,7 +79,7 @@ int main() {
  * Usage: Prompts the user to get the reference dictionary by typing the file name. Reprompts the
  * user if an invalid name is given.
  * Params: dictionary (Lexicon)
- * -----------------------------------------------------------------
+ * -------------------------------------------------------------------------------------------------
  * Returns: None. Void function
 */
 
@@ -123,7 +96,7 @@ void getDictionary(Lexicon &dictionary) {
  * Usage:
  * Prompts user to input a word and strips the case and white spaces
  * Params: prompt (string)
- * -----------------------------------------------------------------
+ * -------------------------------------------------------------------------------------------------
  * Returns: word (string)
  * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
  * instead and repromt the user to re-enter the word prior to checking other validations
