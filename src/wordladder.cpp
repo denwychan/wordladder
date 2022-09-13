@@ -47,7 +47,7 @@ void getDictionary(Lexicon &dictionary);
 string getWord(const string &prompt);
 bool emptyWord(string word);
 bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo);
-bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo);
+bool areWordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo);
 bool areWordsSameLength(string wordOne, string wordTwo);
 bool areWordsDifferent(string wordOne, string wordTwo);
 void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo);
@@ -150,13 +150,13 @@ string getWord(const string &prompt) {
 */
 bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo) {
     // Check words are valid dictionary words, the same length and different from each other
-    return wordsInDictionary(dictionary, wordOne, wordTwo)
+    return areWordsInDictionary(dictionary, wordOne, wordTwo)
             && areWordsSameLength(wordOne, wordTwo)
             && areWordsDifferent(wordOne, wordTwo);
 }
 
 /*
- * Function: isWordInDictionary
+ * Function: areWordsInDictionary
  * Usage:
  * Check if a word is in dictionary, and if not display a warning to the user
  * Params: string, string
@@ -164,7 +164,7 @@ bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo) {
  * Returns: boolean true or false
 */
 
-bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo) {
+bool areWordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo) {
     if (!dictionary.contains(wordOne) || !dictionary.contains(wordTwo)) {
         cout << "The two words must be found in the dictionary." << endl;
         return false;
