@@ -150,13 +150,9 @@ string getWord(const string &prompt) {
 */
 bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo) {
     // Check words are valid dictionary words, the same length and different from each other
-    if (wordsInDictionary(dictionary, wordOne, wordTwo)
+    return wordsInDictionary(dictionary, wordOne, wordTwo)
             && areWordsSameLength(wordOne, wordTwo)
-            && areWordsDifferent(wordOne, wordTwo)) {
-        return true;
-    } else {
-        return false;
-    }
+            && areWordsDifferent(wordOne, wordTwo);
 }
 
 /*
