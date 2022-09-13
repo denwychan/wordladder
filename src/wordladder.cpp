@@ -51,7 +51,7 @@ bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo
 bool areWordsSameLength(string wordOne, string wordTwo);
 bool areWordsDifferent(string wordOne, string wordTwo);
 void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo);
-void findNeighbourWords(
+void findPartialWordLadders(
         const Lexicon &dictionary,
         Set<string> &usedWords,
         Queue<Stack<string>> &queue,
@@ -253,7 +253,7 @@ void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo) {
         // Get the stack containing the first ladder at the front of the queue
         Stack<string> firstLadder = queue.dequeue();
         // Find the neighbouring words for the last word on the first Ladder
-        findNeighbourWords(dictionary, usedWords, queue, firstLadder);
+        findPartialWordLadders(dictionary, usedWords, queue, firstLadder);
     }
     // Get the shortest word ladder at the front of the queue
     if (!queue.isEmpty()) {
@@ -272,16 +272,17 @@ void getWordLadder(const Lexicon &dictionary, string wordOne, string wordTwo) {
 }
 
 /*
- * Function: findNeighbourWords
+ * Function: findPartialWordLadders
  * Usage:
  * Find all the neighbour words from a given start word, which is a word of the same length but
- * differs from the start word by exactly 1 letter e.g. date and data
+ * differs from the start word by exactly 1 letter e.g. date and data, and create partial word
+ * ladders using this information in order to find final word ladder
  * Params: dictionary (Lexicon), usedWords (Set), queue (Queue of Stacks of strings),
  * firstLadder (Stack of strings)
  * -------------------------------------------------------------------------------------------------
  * Returns: None. Void function
 */
-void findNeighbourWords(
+void findPartialWordLadders(
         const Lexicon &dictionary,
         Set<string> &usedWords,
         Queue<Stack<string>> &queue,
