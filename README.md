@@ -23,9 +23,7 @@ A word ladder is a connection from one word to another formed by changing one le
 #### [Quincunx](https://en.wikipedia.org/wiki/Quincunx)
 `NOUN : 1. a group of five objects arranged in the shape of a rectangle with one at each of the four corners and the fifth in the centre`
 
-<img src="readme_images/dice_on_five.png" alt="A die on face five" width="200"/>
-<img src="readme_images/quincunx_of_dice.png" alt="A quincunx of dice on face five" width="200"/>
-<img src="readme_images/quincunx_of_quincunx_of_dice.png" alt="A quincunx of quincunx of dice on face five" width="200"/>
+<img src="readme_images/dice_on_five.png" alt="A die on face five" width="200"/><img src="readme_images/quincunx_of_dice.png" alt="A quincunx of dice on face five" width="200"/><img src="readme_images/quincunx_of_quincunx_of_dice.png" alt="A quincunx of quincunx of dice on face five" width="200"/>
 
 #### Chitchat
 `UNCOUNTABLE NOUN: Chitchat is informal talk about things that are not very important`
