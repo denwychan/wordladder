@@ -46,7 +46,7 @@ using namespace std;
 void getDictionary(Lexicon &dictionary);
 string getWord(const string &prompt);
 bool emptyWord(string word);
-bool validWords(const Lexicon &dictionary, string wordOne, string wordTwo);
+bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo);
 bool wordsInDictionary(const Lexicon &dictionary, string wordOne, string wordTwo);
 bool areWordsSameLength(string wordOne, string wordTwo);
 bool areWordsDifferent(string wordOne, string wordTwo);
@@ -91,7 +91,7 @@ int main() {
         }
 
         // Perform validation checks on word 1 and word 2 before proceeeding to word ladder stage
-        if (validWords(dictionary, wordOne, wordTwo)) {
+        if (areWordsValid(dictionary, wordOne, wordTwo)) {
             //Output shortest word ladder from word 1 to word 2
             getWordLadder(dictionary, wordOne, wordTwo);
             cout << endl;
@@ -136,7 +136,7 @@ string getWord(const string &prompt) {
 }
 
 /*
- * Function: validWords
+ * Function: areWordsValid
  * Usage:
  * Returns true if the words pass the following validation checks:
  * a. They are valid words in the dictionary
@@ -148,7 +148,7 @@ string getWord(const string &prompt) {
  * NOTE for enhancement: this function would check whether the word is a valid dictionary word here
  * instead and repromt the user to re-enter the word prior to checking other validations
 */
-bool validWords(const Lexicon &dictionary, string wordOne, string wordTwo) {
+bool areWordsValid(const Lexicon &dictionary, string wordOne, string wordTwo) {
     // Check words are valid dictionary words, the same length and different from each other
     if (wordsInDictionary(dictionary, wordOne, wordTwo)
             && areWordsSameLength(wordOne, wordTwo)
