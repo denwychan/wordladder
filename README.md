@@ -17,23 +17,23 @@ A word ladder is a connection from one word to another formed by changing one le
 - There is one from 'flam' to 'chat' though.
 - For those interested in the meaning/ 'British-isms' of the example words, definitions ([English Collins Dictionary online](https://www.collinsdictionary.com/dictionary/english/)) are listed below
 
-### Flimflam
+#### Flimflam
 `NOUN: 1. a.  nonsense; foolishness... 2. a deception; swindle`
 
-### [Quincunx](https://en.wikipedia.org/wiki/Quincunx)
+#### [Quincunx](https://en.wikipedia.org/wiki/Quincunx)
 `NOUN : 1. a group of five objects arranged in the shape of a rectangle with one at each of the four corners and the fifth in the centre`
 
 <img src="readme_images/dice_on_five.png" alt="A die on face five" width="200"/>
 <img src="readme_images/quincunx_of_dice.png" alt="A quincunx of dice on face five" width="200"/>
 <img src="readme_images/quincunx_of_quincunx_of_dice.png" alt="A quincunx of quincunx of dice on face five" width="200"/>
 
-### Chitchat
+#### Chitchat
 `UNCOUNTABLE NOUN: Chitchat is informal talk about things that are not very important`
 
-### Flam
+#### Flam
 `NOUN: 1. a falsehood, deception, or sham, 2. nonsense; drivel`
 
-### Chat
+#### Chat
 `NOUN: 1.  informal conversation or talk conducted in an easy familiar manner`
 
 ## Breadth-First-Search (BFS) Algorithm
