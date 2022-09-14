@@ -51,15 +51,11 @@ int main() {
         // Ask for word 1 and quit the program if it is blank
         string wordOne = getWord("Word 1 (or Enter to quit): ");
         if (wordOne == "") {
-            cout << "Exiting... see you later babes!" << endl;
-            pause(2000);
             break;
         }
         // Ask for word 2 and quit the program if it is blank
         string wordTwo = getWord("Word 2 (or Enter to quit): ");
         if (wordTwo == "") {
-            cout << "Exiting... see you later babes!" << endl;
-            pause(2000);
             break;
         }
 
@@ -70,6 +66,8 @@ int main() {
             cout << endl;
         }
     }
+    cout << "Exiting... see you later babes!" << endl;
+    pause(1000);
     cout << "Have a nice day." << endl;
     return 0;
 }
@@ -246,8 +244,7 @@ void findPartialWordLadders(
     // The algorith uses 2 nested loops for efficiency: 1st loop for index of the start word,
     // 2nd loop to loop through a-z of the alphabet
     for (int i = 0; i < startWord.length(); i++) {
-        for (char letter = 'a'; letter <='z'; ++letter) {
-
+        for (char letter = 'a'; letter <='z'; letter++) {
             // Copy the start word to create the neighbour word
             string neighbourWord = startWord;
             // Replace each letter in the neighbour word with another letter from a to z in turn to
